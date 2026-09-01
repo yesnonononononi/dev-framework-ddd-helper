@@ -6,7 +6,8 @@
 
     <groupId>io.github.yesnonononononi</groupId>
     <artifactId>dev-framework-ddd-starter</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
+
     <name>dev-framework-ddd-starter</name>
     <description>Spring Boot starter for DDD development</description>
     <url>https://github.com/yesnonononononi/dev-framework-ddd-starter</url>
@@ -14,7 +15,6 @@
     <properties>
         <java.version>21</java.version>
         <mybatis-plus.version>3.5.9</mybatis-plus.version>
-        <redisson.version>4.0.0</redisson.version>
     </properties>
 
     <licenses>
@@ -62,6 +62,10 @@
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
             <version>${mybatis-plus.version}</version>
@@ -78,10 +82,9 @@
             <version>25.0.0</version>
         </dependency>
         <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson</artifactId>
-            <version>${redisson.version}</version>
-            <optional>true</optional>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -94,6 +97,15 @@
                 <version>3.13.0</version>
                 <configuration>
                     <release>${java.version}</release>
+                    <!-- JDK 23+ 的 javac 默认禁用注解处理（等价 -proc:none），
+                         需显式开启，否则 Lombok 注解会静默失效 -->
+                    <proc>full</proc>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <plugin>

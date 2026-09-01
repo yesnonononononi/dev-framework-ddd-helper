@@ -1,20 +1,32 @@
-package com.summit.devframeworkdddstarter.repo;
-
+package com.summit.devframeworkdddstarter.infrastructure.repository;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.summit.devframeworkdddstarter.domain.model.AggregateRoot;
+import com.summit.devframeworkdddstarter.domain.repository.RepositoryTemplate;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
-
-public abstract class AbstractRepository<M, P> implements RepositoryTemplate<M, P> {
-
+/**
+ * 基础设施层（Infrastructure）仓储实现模板
+ * <p>基于 MyBatis-Plus 的仓储实现，屏蔽持久化细节，仅领域层接口 {@link RepositoryTemplate} 对上层可见。</p>
+ *
+ * @param <M> 领域模型（Model）
+ * @param <P> 持久化对象（PO）
+ */
+@SuppressWarnings("unchecked")
+public abstract class AbstractRepository<M extends AggregateRoot<ID>, P,ID> implements RepositoryTemplate<M,ID> {
 
     @Override
     public void save(M entity) {
@@ -29,10 +41,8 @@ public abstract class AbstractRepository<M, P> implements RepositoryTemplate<M, 
     }
 
     @Override
-    public Optional<M> findById(Long id) {
-        if (id == null)
-            return Optional.empty();
-        P p = mapper().selectById(id);
+    public Optional<M> findById(@NotNull ID id) {
+        P p = mapper().selectById((Serializable) id);
         if (Objects.isNull(p))
             return Optional.empty();
         return Optional.of(this.toModel(p));
@@ -48,10 +58,10 @@ public abstract class AbstractRepository<M, P> implements RepositoryTemplate<M, 
         return Optional.of(this.toModel(p));
     }
 
-    protected Collection<M> findList(Collection<Long> ids) {
+    protected Collection<M> findList(Collection<ID> ids) {
         if (ids == null || ids.isEmpty())
             return List.of();
-        return mapper().selectByIds(ids).stream()
+        return mapper().selectByIds((Collection<? extends Serializable>) ids).stream()
                 .map(this::toModel)
                 .toList();
     }
@@ -75,7 +85,7 @@ public abstract class AbstractRepository<M, P> implements RepositoryTemplate<M, 
     }
 
     @Override
-    public void updateById(M entity) {
+    public void updateById(@NotNull M entity) {
         P po = this.toPO(entity);
         mapper().updateById(po);
     }
@@ -84,6 +94,16 @@ public abstract class AbstractRepository<M, P> implements RepositoryTemplate<M, 
     public void update(Collection<M> list) {
         List<P> l = list.stream().filter(Objects::nonNull).map(this::toPO).toList();
         mapper().updateById(l);
+    }
+
+    @Override
+    public IPage<M> queryByPage(int current, int size) {
+        return queryByPage(current, size, null);
+    }
+
+    public IPage<M> queryByPage(int current, int size, @Nullable QueryWrapper<P> queryWrapper) {
+        return mapper().selectPage(new Page<>(Math.max(current, 1), Math.max(size, 1)), Objects.requireNonNullElse(queryWrapper, new QueryWrapper<>()))
+                .convert(this::toModel);
     }
 
     /**
