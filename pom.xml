@@ -6,7 +6,7 @@
 
     <groupId>io.github.yesnonononononi</groupId>
     <artifactId>dev-framework-ddd-starter</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 
     <name>dev-framework-ddd-starter</name>
     <description>Spring Boot starter for DDD development</description>
