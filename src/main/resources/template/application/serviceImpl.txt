@@ -1,0 +1,86 @@
+package [PACKAGE];
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.summit.ddd.application.vo.PageResult;
+import com.summit.ddd.application.vo.Result;
+import [MODULE_PACKAGE].application.command.[HOLDER]Command;
+import [MODULE_PACKAGE].application.service.[HOLDER]Service;
+import [MODULE_PACKAGE].application.vo.[HOLDER]VO;
+import [MODULE_PACKAGE].domain.model.[HOLDER];
+import [MODULE_PACKAGE].domain.repository.[HOLDER]Repository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+/**
+ * [HOLDER] 应用层服务实现（生成骨架）
+ */
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class [HOLDER]ServiceImpl implements [HOLDER]Service {
+    private final [HOLDER]Repository repository;
+
+    @Override
+    public Result<[HOLDER]VO> findById(Long id) {
+        if (id == null)
+            return Result.error("id is null");
+        Optional<[HOLDER]> model = repository.findById(id);
+        return model.map(m -> Result.success(toVO(m))).orElseGet(() -> Result.error("id 对应数据不存在"));
+    }
+
+    @Override
+    public Result<PageResult<[HOLDER]VO>> findPage(Integer page, Integer pageSize) {
+        int current = page == null ? 1 : Math.max(page, 1);
+        int size = pageSize == null ? 10 : Math.max(pageSize, 1);
+        IPage<[HOLDER]> pageResult = repository.queryByPage(current, size);
+        PageResult<[HOLDER]VO> result = new PageResult<>(pageResult.getCurrent(), pageResult.getSize(),
+                pageResult.getTotal(), pageResult.getRecords().stream().map(this::toVO).toList());
+        return Result.success(result);
+    }
+
+    @Override
+    public Result<Void> add([HOLDER]Command command) {
+        if (command == null)
+            return Result.error("command is null");
+        [HOLDER] model = toModel(command);
+        repository.save(model);
+        return Result.success();
+    }
+
+    @Override
+    public Result<Void> update([HOLDER]Command command) {
+        if (command == null || command.getId() == null)
+            return Result.error("id is null");
+        Optional<[HOLDER]> opt = repository.findById(command.getId());
+        if (opt.isEmpty())
+            return Result.error("id 对应数据不存在");
+        [HOLDER] model = opt.get();
+        BeanUtils.copyProperties(command, model);
+        repository.updateById(model);
+        return Result.success();
+    }
+
+    @Override
+    public Result<Void> delById(Long id) {
+        if (id == null)
+            return Result.error("id is null");
+        repository.findById(id).ifPresent(repository::delete);
+        return Result.success();
+    }
+
+    private [HOLDER]VO toVO([HOLDER] model) {
+        [HOLDER]VO vo = new [HOLDER]VO();
+        BeanUtils.copyProperties(model, vo);
+        return vo;
+    }
+
+    private [HOLDER] toModel([HOLDER]Command command) {
+        [HOLDER] model = new [HOLDER]();
+        BeanUtils.copyProperties(command, model);
+        return model;
+    }
+}

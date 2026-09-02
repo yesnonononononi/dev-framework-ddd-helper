@@ -1,0 +1,10 @@
+package [PACKAGE];
+
+import com.summit.ddd.domain.repository.RepositoryTemplate;
+import [MODULE_PACKAGE].domain.model.[HOLDER];
+
+/**
+ * [HOLDER] 领域仓储（生成骨架）
+ */
+public interface [HOLDER]Repository extends RepositoryTemplate<[HOLDER], Long> {
+}

@@ -1,0 +1,44 @@
+package [PACKAGE];
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.summit.ddd.infrastructure.repository.AbstractRepository;
+import [MODULE_PACKAGE].domain.model.[HOLDER];
+import [MODULE_PACKAGE].domain.repository.[HOLDER]Repository;
+import [MODULE_PACKAGE].infrastructure.persistence.mapper.[HOLDER]Mapper;
+import [MODULE_PACKAGE].infrastructure.persistence.po.[HOLDER]PO;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Repository;
+
+/**
+ * [HOLDER] 仓储实现（生成骨架）
+ */
+@Repository
+public class [HOLDER]RepositoryImpl extends AbstractRepository<[HOLDER], [HOLDER]PO, Long>
+        implements [HOLDER]Repository {
+
+    private final [HOLDER]Mapper mapper;
+
+    public [HOLDER]RepositoryImpl([HOLDER]Mapper mapper) {
+        this.mapper = mapper;
+    }
+
+    @Override
+    protected @NotNull BaseMapper<[HOLDER]PO> mapper() {
+        return this.mapper;
+    }
+
+    @Override
+    protected [HOLDER] toModel([HOLDER]PO po) {
+        [HOLDER] model = new [HOLDER]();
+        BeanUtils.copyProperties(po, model);
+        return model;
+    }
+
+    @Override
+    protected [HOLDER]PO toPO([HOLDER] model) {
+        [HOLDER]PO po = new [HOLDER]PO();
+        BeanUtils.copyProperties(model, po);
+        return po;
+    }
+}

@@ -1,0 +1,21 @@
+package [PACKAGE];
+
+import com.summit.ddd.application.vo.PageResult;
+import com.summit.ddd.application.vo.Result;
+import [MODULE_PACKAGE].application.command.[HOLDER]Command;
+import [MODULE_PACKAGE].application.vo.[HOLDER]VO;
+
+/**
+ * [HOLDER] 应用层服务接口（生成骨架）
+ */
+public interface [HOLDER]Service {
+    Result<[HOLDER]VO> findById(Long id);
+
+    Result<PageResult<[HOLDER]VO>> findPage(Integer page, Integer pageSize);
+
+    Result<Void> add([HOLDER]Command command);
+
+    Result<Void> update([HOLDER]Command command);
+
+    Result<Void> delById(Long id);
+}

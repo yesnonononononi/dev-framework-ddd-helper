@@ -1,0 +1,12 @@
+package [PACKAGE];
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import [MODULE_PACKAGE].infrastructure.persistence.po.[HOLDER]PO;
+import org.apache.ibatis.annotations.Mapper;
+
+/**
+ * [HOLDER] MyBatis Mapper（生成骨架）
+ */
+@Mapper
+public interface [HOLDER]Mapper extends BaseMapper<[HOLDER]PO> {
+}
