@@ -5,11 +5,11 @@
 
 
     <groupId>io.github.yesnonononononi</groupId>
-    <artifactId>dev-framework-ddd-starter</artifactId>
-    <version>1.0.3</version>
+    <artifactId>dev-framework-ddd-helper</artifactId>
+    <version>1.0.5</version>
 
-    <name>dev-framework-ddd-starter</name>
-    <description>Spring Boot starter for DDD development</description>
+    <name>dev-framework-ddd-helper</name>
+    <description>Spring Boot helper for DDD development</description>
     <url>https://github.com/yesnonononononi/dev-framework-ddd-starter</url>
 
     <properties>
@@ -86,11 +86,25 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.4</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

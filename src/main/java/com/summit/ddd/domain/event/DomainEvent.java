@@ -1,6 +1,7 @@
 package com.summit.ddd.domain.event;
 
 import java.time.Instant;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * 领域层（Domain）领域事件标记接口
@@ -8,10 +9,12 @@ import java.time.Instant;
  * 自动生成的访问器即可满足 {@link #occurAt()}）。由聚合根 {@code registerEvent} 收集，
  * 应用层保存聚合后 {@code pull} 取出，经 {@code DomainEventPublisher} 在事务提交后发布。</p>
  */
-public interface DomainEvent {
+public interface DomainEvent<T> {
 
     /**
      * 事件发生时间
      */
     Instant occurAt();
+
+    CompletableFuture<T> result();
 }

@@ -5,6 +5,9 @@ import com.summit.ddd.application.vo.Result;
 import [MODULE_PACKAGE].application.command.[HOLDER]Command;
 import [MODULE_PACKAGE].application.vo.[HOLDER]VO;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * [HOLDER] 应用层服务接口（生成骨架）
  */
@@ -18,4 +21,6 @@ public interface [HOLDER]Service {
     Result<Void> update([HOLDER]Command command);
 
     Result<Void> delById(Long id);
+
+    Result<List<[HOLDER]VO>> queryIn(Collection<Long> ids);
 }

@@ -3,7 +3,6 @@ package com.summit.ddd.infrastructure.event;
 import com.summit.ddd.domain.event.DomainEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
@@ -15,15 +14,15 @@ import java.util.List;
  * <p>在事务提交后发布领域事件：存在活跃事务时注册事务同步回调、提交成功后发布，
  * 确保事件不会因后续回滚而对外泄漏；无事务时立即发布。</p>
  */
-@Component
+
 @RequiredArgsConstructor
 public class DomainEventPublisher {
     private final ApplicationEventPublisher publisher;
 
-    public void publishAfterCommit(Collection<DomainEvent> events) {
+    public void publishAfterCommit(Collection<? extends DomainEvent<?>> events) {
         if (events == null || events.isEmpty())
             return;
-        List<DomainEvent> snapshot = List.copyOf(events);
+        List<? extends DomainEvent<?>> snapshot = List.copyOf(events);
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
             TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
                 @Override
@@ -34,5 +33,9 @@ public class DomainEventPublisher {
         } else {
             snapshot.forEach(publisher::publishEvent);
         }
+    }
+
+    public void publishEvent(DomainEvent<?> event) {
+        publisher.publishEvent(event);
     }
 }

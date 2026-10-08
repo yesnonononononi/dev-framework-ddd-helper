@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.summit.ddd.domain.model.AggregateRoot;
 import com.summit.ddd.domain.repository.RepositoryTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,9 +23,10 @@ import java.util.function.Function;
  *
  * @param <M> 领域模型（Model）
  * @param <P> 持久化对象（PO）
+ * @param <ID> 标识类型
  */
 @SuppressWarnings("unchecked")
-public abstract class AbstractRepository<M extends AggregateRoot<ID>, P,ID> implements RepositoryTemplate<M,ID> {
+public abstract class AbstractRepository<M, P, ID> implements RepositoryTemplate<M, ID> {
 
     @Override
     public void save(M entity) {
@@ -48,6 +48,14 @@ public abstract class AbstractRepository<M extends AggregateRoot<ID>, P,ID> impl
         return Optional.of(this.toModel(p));
     }
 
+    protected Optional<M> findBy(QueryWrapper<P> queryWrapper){
+        P p = mapper().selectOne(queryWrapper);
+        if (Objects.isNull(p))
+            return Optional.empty();
+        return Optional.of(this.toModel(p));
+    }
+
+    @Deprecated
     protected Optional<M> findBy(Object val, SFunction<P, ?> by) {
         if (val == null)
             return Optional.empty();
@@ -66,6 +74,12 @@ public abstract class AbstractRepository<M extends AggregateRoot<ID>, P,ID> impl
                 .toList();
     }
 
+    protected List<M> findListBy(QueryWrapper<P> queryWrapper) {
+        return mapper().selectList(Objects.requireNonNullElse(queryWrapper, new QueryWrapper<>())).stream()
+                .map(this::toModel)
+                .toList();
+    }
+    @Deprecated
     protected List<M> findListBy(Object val, SFunction<P, ?> by) {
         if (val == null)
             return List.of();
@@ -126,6 +140,8 @@ public abstract class AbstractRepository<M extends AggregateRoot<ID>, P,ID> impl
         LambdaQueryWrapper<P> queryWrapper = new LambdaQueryWrapper<P>().eq(by, val);
         mapper().delete(queryWrapper);
     }
+
+
 
     protected abstract P toPO(M entity);
 

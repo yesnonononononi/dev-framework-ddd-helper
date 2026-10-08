@@ -1,0 +1,29 @@
+package [PACKAGE];
+
+import [MODULE_PACKAGE].application.service.[HOLDER]Service;
+import [MODULE_PACKAGE].application.vo.[HOLDER]VO;
+import [MODULE_PACKAGE].domain.event.[HOLDER]BatchQueryEvent;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
+
+import java.util.Collection;
+import java.util.List;
+
+/**
+ * [HOLDER] 批量查询事件响应器（生成骨架）
+ * <p>监听 {@code [HOLDER]BatchQueryEvent}，按标识集合一次性返回视图对象，避免调用方逐条查询。</p>
+ */
+@Component
+@RequiredArgsConstructor
+public class [HOLDER]Feign {
+    private final [HOLDER]Service service;
+
+    @EventListener(value = [HOLDER]BatchQueryEvent.class)
+    public List<[HOLDER]VO> queryIn([HOLDER]BatchQueryEvent event) {
+        Collection<Long> ids = event.getIds();
+        if (ids.isEmpty())
+            return List.of();
+        return service.queryIn(ids).getData();
+    }
+}

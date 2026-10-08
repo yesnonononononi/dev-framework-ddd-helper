@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+
 /**
  * [HOLDER] 仓储实现（生成骨架）
  */
@@ -26,6 +28,11 @@ public class [HOLDER]RepositoryImpl extends AbstractRepository<[HOLDER], [HOLDER
     @Override
     protected @NotNull BaseMapper<[HOLDER]PO> mapper() {
         return this.mapper;
+    }
+
+    @Override
+    public Collection<[HOLDER]> findList(Collection<Long> ids) {
+        return super.findList(ids);
     }
 
     @Override

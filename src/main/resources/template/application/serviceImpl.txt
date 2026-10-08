@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,6 +24,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class [HOLDER]ServiceImpl implements [HOLDER]Service {
+
     private final [HOLDER]Repository repository;
 
     @Override
@@ -70,6 +73,13 @@ public class [HOLDER]ServiceImpl implements [HOLDER]Service {
             return Result.error("id is null");
         repository.findById(id).ifPresent(repository::delete);
         return Result.success();
+    }
+
+    @Override
+    public Result<List<[HOLDER]VO>> queryIn(Collection<Long> ids) {
+        if (ids == null || ids.isEmpty())
+            return Result.success(List.of());
+        return Result.success(repository.findList(ids).stream().map(this::toVO).toList());
     }
 
     private [HOLDER]VO toVO([HOLDER] model) {
