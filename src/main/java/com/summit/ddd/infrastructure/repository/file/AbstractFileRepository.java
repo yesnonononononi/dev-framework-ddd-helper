@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.summit.ddd.infrastructure.repository.AbstractRepository;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
@@ -48,7 +47,7 @@ public abstract class AbstractFileRepository<M, P> extends AbstractRepository<M,
     protected abstract P prepareUpdate(P previous, P replacement);
 
     @Override
-    protected @NotNull BaseMapper<P> mapper() {
+    protected  BaseMapper<P> mapper() {
         throw new UnsupportedOperationException("SQL query conditions are not supported by file repositories");
     }
 
@@ -113,7 +112,7 @@ public abstract class AbstractFileRepository<M, P> extends AbstractRepository<M,
     }
 
     @Override
-    public void updateById(@NotNull M entity) {
+    public void updateById( M entity) {
         update(List.of(entity));
     }
 

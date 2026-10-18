@@ -7,8 +7,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.summit.ddd.domain.repository.RepositoryTemplate;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -41,7 +39,7 @@ public abstract class AbstractRepository<M, P, ID> implements RepositoryTemplate
     }
 
     @Override
-    public Optional<M> findById(@NotNull ID id) {
+    public Optional<M> findById( ID id) {
         P p = mapper().selectById((Serializable) id);
         if (Objects.isNull(p))
             return Optional.empty();
@@ -99,7 +97,7 @@ public abstract class AbstractRepository<M, P, ID> implements RepositoryTemplate
     }
 
     @Override
-    public void updateById(@NotNull M entity) {
+    public void updateById( M entity) {
         P po = this.toPO(entity);
         mapper().updateById(po);
     }
@@ -115,7 +113,7 @@ public abstract class AbstractRepository<M, P, ID> implements RepositoryTemplate
         return queryByPage(current, size, null);
     }
 
-    public IPage<M> queryByPage(int current, int size, @Nullable QueryWrapper<P> queryWrapper) {
+    public IPage<M> queryByPage(int current, int size,  QueryWrapper<P> queryWrapper) {
         return mapper().selectPage(new Page<>(Math.max(current, 1), Math.max(size, 1)), Objects.requireNonNullElse(queryWrapper, new QueryWrapper<>()))
                 .convert(this::toModel);
     }
@@ -147,5 +145,5 @@ public abstract class AbstractRepository<M, P, ID> implements RepositoryTemplate
 
     protected abstract M toModel(P po);
 
-    protected abstract @NotNull BaseMapper<P> mapper();
+    protected abstract  BaseMapper<P> mapper();
 }
